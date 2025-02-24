@@ -1,7 +1,25 @@
+buildscript {
+    // Your existing repositories and dependencies here
+    repositories {
+        google()
+        mavenCentral()
+    }
+    
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.2.1'
+        // Your other classpath dependencies like Flutter and Kotlin
+    }
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
+    }
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
     }
 }
 
