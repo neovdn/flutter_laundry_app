@@ -1,74 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:flutter_laundry_app/core/router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
+import 'core/config/firebase_config.dart';
+import 'core/network/network_info.dart';
+import 'data/datasources/remote/firebase_auth_remote_data_source.dart';
+import 'data/repositories/auth_repository_impl.dart';
+import 'presentation/providers/auth_provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Pastikan binding sudah diinisialisasi
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  // Membuat container dengan overrides
+  final container = ProviderContainer(
+    overrides: [
+      // Mendefinisikan implementasi untuk authRepositoryProvider
+      authRepositoryProvider.overrideWith((ref) {
+        final firebaseAuth = ref.watch(firebaseAuthProvider);
+        final firestore = ref.watch(firestoreProvider);
+
+        final remoteDataSource = FirebaseAuthRemoteDataSourceImpl(
+          firebaseAuth: firebaseAuth,
+          firestore: firestore,
+        );
+
+        final networkInfo =
+            NetworkInfoImpl(InternetConnectionChecker.createInstance());
+
+        return AuthRepositoryImpl(
+          remoteDataSource: remoteDataSource,
+          networkInfo: networkInfo,
+        );
+      }),
+    ],
   );
 
-  runApp(const MyApp());
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final goRouter = ref.watch(routerProvider);
+
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Laundry App',
+      title: 'Laundry App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MyHomePage(title: 'Flutter Laundry App'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      routerConfig: goRouter,
     );
   }
 }
