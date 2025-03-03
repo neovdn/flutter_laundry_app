@@ -132,93 +132,93 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
   }
 
-  void _showAddressForm() {
-    TextEditingController streetController = TextEditingController();
-    TextEditingController houseNumberController = TextEditingController();
-    TextEditingController districtController = TextEditingController();
-    TextEditingController cityController = TextEditingController();
-    TextEditingController provinceController = TextEditingController();
-    TextEditingController postalCodeController = TextEditingController();
+  // void _showAddressForm() {
+  //   TextEditingController streetController = TextEditingController();
+  //   TextEditingController houseNumberController = TextEditingController();
+  //   TextEditingController districtController = TextEditingController();
+  //   TextEditingController cityController = TextEditingController();
+  //   TextEditingController provinceController = TextEditingController();
+  //   TextEditingController postalCodeController = TextEditingController();
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomTextFormField(
-                  controller: streetController,
-                  hintText: 'Masukkan Nama Jalan',
-                  labelText: 'Nama Jalan',
-                  prefixIcon: Icons.location_on,
-                ),
-                const SizedBox(height: 8),
-                CustomTextFormField(
-                  controller: houseNumberController,
-                  hintText: 'Masukkan Nomor Rumah',
-                  labelText: 'Nomor Rumah',
-                  prefixIcon: Icons.home,
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 8),
-                CustomTextFormField(
-                  controller: districtController,
-                  hintText: 'Masukkan Kelurahan/Kecamatan',
-                  labelText: 'Kelurahan/Kecamatan',
-                  prefixIcon: Icons.location_city,
-                ),
-                const SizedBox(height: 8),
-                CustomTextFormField(
-                  controller: cityController,
-                  hintText: 'Masukkan Kota/Kabupaten',
-                  labelText: 'Kota/Kabupaten',
-                  prefixIcon: Icons.apartment,
-                ),
-                const SizedBox(height: 8),
-                CustomTextFormField(
-                  controller: provinceController,
-                  hintText: 'Masukkan Provinsi',
-                  labelText: 'Provinsi',
-                  prefixIcon: Icons.map,
-                ),
-                const SizedBox(height: 8),
-                CustomTextFormField(
-                  controller: postalCodeController,
-                  hintText: 'Masukkan Kode Pos',
-                  labelText: 'Kode Pos',
-                  prefixIcon: Icons.local_post_office,
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 16),
-                CustomButton(
-                  text: 'Selesai',
-                  onPressed: () {
-                    setState(() {
-                      _addressController.text =
-                          '${streetController.text}, No. ${houseNumberController.text}, '
-                          '${districtController.text}, ${cityController.text}, '
-                          '${provinceController.text}, ${postalCodeController.text}';
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     builder: (context) {
+  //       return Padding(
+  //         padding: EdgeInsets.only(
+  //           bottom: MediaQuery.of(context).viewInsets.bottom,
+  //           left: 16,
+  //           right: 16,
+  //           top: 16,
+  //         ),
+  //         child: SingleChildScrollView(
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               CustomTextFormField(
+  //                 controller: streetController,
+  //                 hintText: 'Masukkan Nama Jalan',
+  //                 labelText: 'Nama Jalan',
+  //                 prefixIcon: Icons.location_on,
+  //               ),
+  //               const SizedBox(height: 8),
+  //               CustomTextFormField(
+  //                 controller: houseNumberController,
+  //                 hintText: 'Masukkan Nomor Rumah',
+  //                 labelText: 'Nomor Rumah',
+  //                 prefixIcon: Icons.home,
+  //                 keyboardType: TextInputType.number,
+  //               ),
+  //               const SizedBox(height: 8),
+  //               CustomTextFormField(
+  //                 controller: districtController,
+  //                 hintText: 'Masukkan Kelurahan/Kecamatan',
+  //                 labelText: 'Kelurahan/Kecamatan',
+  //                 prefixIcon: Icons.location_city,
+  //               ),
+  //               const SizedBox(height: 8),
+  //               CustomTextFormField(
+  //                 controller: cityController,
+  //                 hintText: 'Masukkan Kota/Kabupaten',
+  //                 labelText: 'Kota/Kabupaten',
+  //                 prefixIcon: Icons.apartment,
+  //               ),
+  //               const SizedBox(height: 8),
+  //               CustomTextFormField(
+  //                 controller: provinceController,
+  //                 hintText: 'Masukkan Provinsi',
+  //                 labelText: 'Provinsi',
+  //                 prefixIcon: Icons.map,
+  //               ),
+  //               const SizedBox(height: 8),
+  //               CustomTextFormField(
+  //                 controller: postalCodeController,
+  //                 hintText: 'Masukkan Kode Pos',
+  //                 labelText: 'Kode Pos',
+  //                 prefixIcon: Icons.local_post_office,
+  //                 keyboardType: TextInputType.number,
+  //               ),
+  //               const SizedBox(height: 16),
+  //               CustomButton(
+  //                 text: 'Selesai',
+  //                 onPressed: () {
+  //                   setState(() {
+  //                     _addressController.text =
+  //                         '${streetController.text}, No. ${houseNumberController.text}, '
+  //                         '${districtController.text}, ${cityController.text}, '
+  //                         '${provinceController.text}, ${postalCodeController.text}';
+  //                   });
+  //                   Navigator.pop(context);
+  //                 },
+  //               ),
+  //               const SizedBox(height: 16),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -311,19 +311,19 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           validator: Validators.validatePhoneNumber,
                         ),
                         const SizedBox(height: 12),
-                        CustomTextFormField(
-                          controller: _addressController,
-                          hintText: _roleController.text == 'Worker'
-                              ? 'Masukkan Alamat Laundry'
-                              : 'Masukkan Alamat Rumah',
-                          labelText: _roleController.text == 'Worker'
-                              ? 'Alamat Laundry'
-                              : 'Alamat Rumah',
-                          prefixIcon: Icons.location_on,
-                          readOnly: true, // Mencegah input manual
-                          onTap: _showAddressForm,
-                          validator: Validators.validateAddress,
-                        ),
+                        // CustomTextFormField(
+                        //   controller: _addressController,
+                        //   hintText: _roleController.text == 'Worker'
+                        //       ? 'Masukkan Alamat Laundry'
+                        //       : 'Masukkan Alamat Rumah',
+                        //   labelText: _roleController.text == 'Worker'
+                        //       ? 'Alamat Laundry'
+                        //       : 'Alamat Rumah',
+                        //   prefixIcon: Icons.location_on,
+                        //   readOnly: true, // Mencegah input manual
+                        //   onTap: _showAddressForm,
+                        //   validator: Validators.validateAddress,
+                        // ),
                         const SizedBox(height: 12),
                         authState.status == AuthStatus.loading
                             ? const LoadingIndicator()

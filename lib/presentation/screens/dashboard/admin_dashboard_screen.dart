@@ -98,7 +98,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                                                   .width *
                                               0.48,
                                           child: SvgPicture.asset(
-                                            'assets/svg/create_order_customer.svg',
+                                            'assets/svg/create_order.svg',
                                             fit: BoxFit.contain,
                                           ),
                                         ),
@@ -118,26 +118,11 @@ class AdminDashboardScreen extends ConsumerWidget {
                                         ),
                                       ],
                                     ),
-
                                     // Baris kedua SVG
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.start,
                                       children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          child: SvgPicture.asset(
-                                            'assets/svg/edit_address_laundry.svg',
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
                                         SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
