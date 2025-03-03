@@ -1,3 +1,4 @@
+import 'package:flutter_laundry_app/presentation/screens/dashboard/admin_dashboard_screen.dart';
 import 'package:flutter_laundry_app/presentation/screens/dashboard/user_dashboard_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +23,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/user-dashboard',
         builder: (context, state) => const UserDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/admin-dashboard',
+        builder: (context, state) => const AdminDashboardScreen(),
       ),
     ],
   );
