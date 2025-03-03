@@ -53,18 +53,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
+
       final authState = ref.read(authProvider);
+
       if (authState.status == AuthStatus.success && mounted) {
-        // Tambahkan mounted check
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Login berhasil!'),
             backgroundColor: Colors.green,
           ),
         );
+
         if (mounted) {
-          // Periksa lagi sebelum navigasi
-          context.go('/user-dashboard');
+          // Ambil role dari user
+          final String? role = authState.user?.role;
+
+          if (role == 'Customer') {
+            context.go('/user-dashboard');
+          } else if (role == 'Worker') {
+            context.go('/admin-dashboard');
+          } else {
+            // Role tidak dikenali, fallback ke halaman login lagi
+            context.go('/login');
+          }
         }
       }
     }
@@ -117,7 +128,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           validator: Validators.validatePassword,
                         ),
                         const SizedBox(height: 12),
-                        
                         authState.status == AuthStatus.loading
                             ? const LoadingIndicator()
                             : Row(

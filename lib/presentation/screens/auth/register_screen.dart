@@ -67,18 +67,24 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             phoneNumber: _phoneNumberController.text.trim(),
             address: _addressController.text.trim(),
           );
+
       final authState = ref.read(authProvider);
+
       if (authState.status == AuthStatus.success && mounted) {
-        // Tambahkan mounted check
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Registrasi berhasil!'),
             backgroundColor: Colors.green,
           ),
         );
+
         if (mounted) {
-          // Periksa lagi sebelum navigasi
-          context.go('/user-dashboard');
+          // Cek role dan arahkan ke halaman yang sesuai
+          if (_roleController.text.trim() == 'Customer') {
+            context.go('/user-dashboard');
+          } else if (_roleController.text.trim() == 'Worker') {
+            context.go('/admin-dashboard');
+          }
         }
       } else if (authState.status == AuthStatus.error &&
           authState.failure != null &&
