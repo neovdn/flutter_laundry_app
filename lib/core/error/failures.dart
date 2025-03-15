@@ -1,33 +1,56 @@
+// Base Failure class
 abstract class Failure {
   final String message;
-  
+
   Failure({required this.message});
 }
 
 class ServerFailure extends Failure {
-  ServerFailure() : super(message: 'Terjadi kesalahan pada server');
-}
-
-class CacheFailure extends Failure {
-  CacheFailure() : super(message: 'Gagal mengambil data dari cache');
+  ServerFailure({String? message})
+      : super(message: message ?? 'Server error occurred');
 }
 
 class NetworkFailure extends Failure {
-  NetworkFailure() : super(message: 'Tidak ada koneksi internet');
+  NetworkFailure({String? message})
+      : super(message: message ?? 'No internet connection');
 }
 
 class WeakPasswordFailure extends Failure {
-  WeakPasswordFailure() : super(message: 'Password terlalu lemah');
-}
-
-class EmailAlreadyInUseFailure extends Failure {
-  EmailAlreadyInUseFailure() : super(message: 'Email sudah digunakan');
-}
-
-class InvalidCredentialsFailure extends Failure {
-  InvalidCredentialsFailure() : super(message: 'Email atau password salah');
+  WeakPasswordFailure({String? message})
+      : super(message: message ?? 'Password is too weak');
 }
 
 class UserNotFoundFailure extends Failure {
-  UserNotFoundFailure() : super(message: 'Pengguna tidak ditemukan');
+  UserNotFoundFailure({String? message})
+      : super(message: message ?? 'User not found');
+}
+
+class EmailAlreadyInUseFailure extends Failure {
+  EmailAlreadyInUseFailure({String? message})
+      : super(message: message ?? 'Email already in use');
+}
+
+class InvalidCredentialsFailure extends Failure {
+  InvalidCredentialsFailure({String? message})
+      : super(message: message ?? 'Invalid email or password');
+}
+
+class OrderFailure extends Failure {
+  OrderFailure({required super.message});
+}
+
+class UniqueNameAlreadyInUseFailure extends Failure {
+  UniqueNameAlreadyInUseFailure({String? message})
+      : super(message: message ?? 'This unique name is already taken');
+}
+
+class EmailNotFoundFailure extends Failure {
+  EmailNotFoundFailure({String? message})
+      : super(
+            message: message ?? 'User not found');
+}
+
+class WrongPasswordFailure extends Failure {
+  WrongPasswordFailure({String? message})
+      : super(message: message ?? 'Password is incorrect');
 }
