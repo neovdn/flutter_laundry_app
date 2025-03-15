@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_laundry_app/presentation/style/typography.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_laundry_app/presentation/style/app_typography.dart';
+import 'package:flutter_laundry_app/presentation/style/colors/background_colors.dart';
+import 'package:flutter_laundry_app/presentation/style/colors/border_colors.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/button_sizes.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/padding_sizes.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/border_sizes.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final String hintText;
@@ -13,6 +19,9 @@ class CustomTextFormField extends StatefulWidget {
   final String? Function(String?)? validator;
   final bool readOnly;
   final VoidCallback? onTap;
+  final void Function(String?)? onSaved;
+  final void Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextFormField({
     super.key,
@@ -27,6 +36,9 @@ class CustomTextFormField extends StatefulWidget {
     this.validator,
     this.readOnly = false,
     this.onTap,
+    this.onSaved,
+    this.onChanged,
+    this.inputFormatters,
   });
 
   @override
@@ -49,6 +61,8 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
         validator: widget.validator,
         readOnly: widget.readOnly,
         onTap: widget.onTap,
+        onChanged: widget.onChanged,
+        inputFormatters: widget.inputFormatters,
         decoration: InputDecoration(
           hintText: widget.hintText,
           labelText: widget.labelText,
@@ -57,23 +71,33 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
               widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
           suffixIcon: widget.suffixIcon,
           filled: true,
-          fillColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          fillColor: BackgroundColors.formFieldFill,
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: PaddingSizes.formFieldVertical,
+            horizontal: PaddingSizes.formFieldHorizontal,
+          ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+            borderRadius: BorderRadius.circular(ButtonSizes.borderRadius),
+            borderSide: const BorderSide(
+              color: BorderColors.defaultBorder,
+              width: BorderSizes.thin,
+            ),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(ButtonSizes.borderRadius),
             borderSide: BorderSide(
-              color: isHovered ? Colors.lightBlueAccent : Colors.grey,
-              width: 1.5,
+              color: isHovered
+                  ? BorderColors.focusedBorder
+                  : BorderColors.defaultBorder,
+              width: BorderSizes.thin,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.lightBlueAccent, width: 2),
+            borderRadius: BorderRadius.circular(ButtonSizes.borderRadius),
+            borderSide: const BorderSide(
+              color: BorderColors.focusedBorder,
+              width: BorderSizes.medium,
+            ),
           ),
         ),
       ),

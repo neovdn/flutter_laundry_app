@@ -9,6 +9,8 @@ class UserModel extends User {
     required super.email,
     required super.phoneNumber,
     required super.address,
+    required super.regulerPrice,
+    required super.expressPrice,
     required super.createdAt,
   });
 
@@ -21,6 +23,8 @@ class UserModel extends User {
       email: json['email'],
       phoneNumber: json['phoneNumber'],
       address: json['address'],
+      regulerPrice: json['regulerPrice'] ?? 7000,
+      expressPrice: json['expressPrice'] ?? 10000,
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
@@ -34,20 +38,9 @@ class UserModel extends User {
       'email': email,
       'phoneNumber': phoneNumber,
       'address': address,
+      'regulerPrice': regulerPrice,
+      'expressPrice': expressPrice,
       'createdAt': createdAt.toIso8601String(),
     };
-  }
-
-  factory UserModel.fromEntity(User user) {
-    return UserModel(
-      id: user.id,
-      role: user.role,
-      fullName: user.fullName,
-      uniqueName: user.uniqueName,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      address: user.address,
-      createdAt: user.createdAt,
-    );
   }
 }

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_laundry_app/presentation/style/colors/background_colors.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/logo_sizes.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomCircleAvatar extends StatelessWidget {
   final String svgPath;
   final double radius;
   final Color backgroundColor;
-  final Color borderColor;
 
   const CustomCircleAvatar({
     super.key,
     required this.svgPath,
-    this.radius = 64,
-    this.backgroundColor = Colors.white,
-    this.borderColor = Colors.lightBlueAccent,
+    this.radius = LogoSizes.circleAvatarRadius, // Use default from LogoSizes
+    this.backgroundColor = BackgroundColors.avatarBackground, // Updated to use specific name
   });
 
   @override

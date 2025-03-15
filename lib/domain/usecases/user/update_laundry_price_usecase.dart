@@ -9,7 +9,7 @@ class UpdateLaundryPriceUseCase {
 
   UpdateLaundryPriceUseCase(this.repository);
 
-  Future<Either<Failure, User>> call(int regulerPrice, int expressPrice) {
-    return repository.updateLaundryPrice(regulerPrice, expressPrice);
+  Future<Either<Failure, User>> call(int regulerPrice, int expressPrice) async {
+    return await repository.updateLaundryPrice(regulerPrice, expressPrice);
   }
 }

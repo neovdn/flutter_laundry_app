@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_laundry_app/presentation/widgets/common/custom_circle_avatar.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/logo_sizes.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/margin_sizes.dart';
 
 class AppLogoWidget extends StatelessWidget {
   final double size;
@@ -9,7 +11,7 @@ class AppLogoWidget extends StatelessWidget {
 
   const AppLogoWidget({
     super.key,
-    this.size = 80,
+    this.size = LogoSizes.avatarSize, // Use default from LogoSizes
     this.appName = 'LaundryGo',
     this.textStyle,
   });
@@ -19,11 +21,14 @@ class AppLogoWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CustomCircleAvatar(svgPath: 'assets/svg/logo.svg'),
-        const SizedBox(height: 12),
+        CustomCircleAvatar(
+          svgPath: 'assets/svg/logo.svg',
+        ),
+        const SizedBox(
+            height: MarginSizes.logoSpacing), // Updated from moderate
         SvgPicture.asset(
           'assets/svg/LaundryGo.svg',
-          width: 160, // Sesuaikan ukuran sesuai kebutuhan
+          width: LogoSizes.appNameWidth, // Use defined size
         ),
       ],
     );

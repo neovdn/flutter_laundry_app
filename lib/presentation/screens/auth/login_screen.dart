@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_laundry_app/presentation/style/colors/background_colors.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/button_sizes.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/margin_sizes.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/padding_sizes.dart';
 import 'package:flutter_laundry_app/presentation/widgets/common/app_logo_widget.dart';
 import 'package:flutter_laundry_app/presentation/widgets/common/custom_text.dart';
 import 'package:flutter_laundry_app/presentation/widgets/common/custom_text_form_field.dart';
@@ -10,7 +14,7 @@ import '../../widgets/common/custom_button.dart';
 import '../../widgets/common/loading_indicator.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  static const routeName = '/login';
+  static const routeName = '/login-screen';
 
   const LoginScreen({super.key});
 
@@ -23,6 +27,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   bool _isPasswordVisible = false;
+
+  // Add these state variables
+  String? _emailError;
+  String? _passwordError;
 
   @override
   void initState() {
@@ -58,24 +66,41 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       if (authState.status == AuthStatus.success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login berhasil!'),
-            backgroundColor: Colors.green,
+          SnackBar(
+            content: const Text('Login successful!'),
+            backgroundColor: BackgroundColors.success,
           ),
         );
 
         if (mounted) {
-          // Ambil role dari user
           final String? role = authState.user?.role;
 
           if (role == 'Customer') {
-            context.go('/user-dashboard');
+            context.go('/user-dashboard-screen');
           } else if (role == 'Worker') {
-            context.go('/admin-dashboard');
+            context.go('/admin-dashboard-screen');
           } else {
-            // Role tidak dikenali, fallback ke halaman login lagi
-            context.go('/login');
+            context.go('/login-screen');
           }
+        }
+      } else if (authState.status == AuthStatus.error &&
+          authState.failure != null &&
+          mounted) {
+        // Use Validators to handle login errors
+        Validators.handleLoginErrors(
+          authState.failure!.message,
+          (error) => setState(() => _emailError = error),
+          (error) => setState(() => _passwordError = error),
+        );
+
+        // Show general error if no field-specific error was set
+        if (_emailError == null && _passwordError == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(authState.failure!.message),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       }
     }
@@ -89,12 +114,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 12),
+            SizedBox(
+                height: MarginSizes
+                    .screenEdgeSpacing), // Updated from screenEdgeSpacing (adjusted to PaddingSizes)
             const AppLogoWidget(),
-            Spacer(),
+            const Spacer(),
             SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(
+                    PaddingSizes.formOuterPadding), // Updated from moderate
                 child: Form(
                   key: _formKey,
                   child: SingleChildScrollView(
@@ -103,16 +131,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       children: [
                         CustomTextFormField(
                           controller: _emailController,
-                          hintText: 'Masukkan Email',
+                          hintText: 'Input Email',
                           labelText: 'Email',
                           prefixIcon: Icons.email,
                           textInputAction: TextInputAction.next,
                           validator: Validators.validateEmail,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: MarginSizes.logoSpacing),
                         CustomTextFormField(
                           controller: _passwordController,
-                          hintText: 'Masukkan Password',
+                          hintText: 'Input Password',
                           labelText: 'Password',
                           prefixIcon: Icons.password,
                           suffixIcon: IconButton(
@@ -127,19 +155,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           textInputAction: TextInputAction.next,
                           validator: Validators.validatePassword,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: MarginSizes.logoSpacing),
                         authState.status == AuthStatus.loading
                             ? const LoadingIndicator()
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   CustomButton(
-                                    width: 110,
-                                    text: 'Masuk',
-                                    onPressed: authState.status ==
-                                            AuthStatus.loading
-                                        ? () {} // Fungsi kosong saat loading
-                                        : _submitLoginForm,
+                                    width: ButtonSizes.loginButtonWidth,
+                                    text: 'Log in',
+                                    onPressed:
+                                        authState.status == AuthStatus.loading
+                                            ? () {}
+                                            : _submitLoginForm,
                                   ),
                                 ],
                               ),
@@ -149,15 +177,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             CustomText(
-              normalText: 'Belum Punya Akun? ',
-              highlightedText: 'Daftar',
+              normalText: 'Don\'t have an account? ',
+              highlightedText: 'Register',
               onTap: () {
-                context.push('/register');
+                context.push('/register-screen');
               },
             ),
-            const SizedBox(height: 12),
+            const SizedBox(
+                height: MarginSizes
+                    .screenEdgeSpacing), // Updated from screenEdgeSpacing (adjusted to PaddingSizes)
           ],
         ),
       ),

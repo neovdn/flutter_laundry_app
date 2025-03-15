@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_laundry_app/presentation/style/colors/button_colors.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/indicator_sizes.dart';
 
 class LoadingIndicator extends StatelessWidget {
   final double size;
@@ -6,7 +8,7 @@ class LoadingIndicator extends StatelessWidget {
 
   const LoadingIndicator({
     super.key,
-    this.size = 50,
+    this.size = IndicatorSizes.defaultLoadingSize, // Use defined default
     this.color,
   });
 
@@ -17,7 +19,7 @@ class LoadingIndicator extends StatelessWidget {
         width: size,
         height: size,
         child: CircularProgressIndicator(
-          color: color ?? Theme.of(context).primaryColor,
+          color: color ?? ButtonColors.loadingIndicatorSecondary,
         ),
       ),
     );

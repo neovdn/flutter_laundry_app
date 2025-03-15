@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import '../../core/error/failures.dart';
+import 'package:flutter_laundry_app/domain/entities/user.dart';
+import 'package:flutter_laundry_app/domain/repositories/auth_repository.dart';
 import '../../core/error/exceptions.dart';
+import '../../core/error/failures.dart';
 import '../../core/network/network_info.dart';
-import '../../domain/entities/user.dart';
-import '../../domain/repositories/auth_repository.dart';
 import '../datasources/remote/firebase_auth_remote_data_source.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -43,6 +43,10 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(WeakPasswordFailure());
       } on EmailAlreadyInUseException {
         return Left(EmailAlreadyInUseFailure());
+      } on UniqueNameAlreadyInUseException {
+        return Left(UniqueNameAlreadyInUseFailure());
+      } catch (e) {
+        return Left(ServerFailure());
       }
     } else {
       return Left(NetworkFailure());
@@ -63,10 +67,16 @@ class AuthRepositoryImpl implements AuthRepository {
         return Right(userModel);
       } on ServerException {
         return Left(ServerFailure());
+      } on EmailNotFoundException {
+        return Left(EmailNotFoundFailure());
+      } on WrongPasswordException {
+        return Left(WrongPasswordFailure());
       } on InvalidCredentialsException {
         return Left(InvalidCredentialsFailure());
       } on UserNotFoundException {
         return Left(UserNotFoundFailure());
+      } catch (e) {
+        return Left(ServerFailure());
       }
     } else {
       return Left(NetworkFailure());

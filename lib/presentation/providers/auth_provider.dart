@@ -99,11 +99,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String phoneNumber,
     required String address,
   }) async {
-    if (_isProcessing) return; // Cegah pemanggilan berulang
+    if (_isProcessing) return;
     _isProcessing = true;
-    state = AuthState(operationType: 'register'); // Set operation type
 
-    state = state.copyWith(status: AuthStatus.loading);
+    state =
+        state.copyWith(status: AuthStatus.loading, operationType: 'register');
 
     final result = await _registerUseCase(
       role: role,
@@ -119,24 +119,26 @@ class AuthNotifier extends StateNotifier<AuthState> {
       (failure) => state = state.copyWith(
         status: AuthStatus.error,
         failure: failure,
+        user: null,
       ),
       (user) => state = state.copyWith(
         status: AuthStatus.success,
+        failure: null,
         user: user,
       ),
     );
-    _isProcessing = false; // Reset flag setelah selesai
+
+    _isProcessing = false;
   }
 
   Future<void> login({
     required String email,
     required String password,
   }) async {
-    if (_isProcessing) return; // Cegah pemanggilan berulang
+    if (_isProcessing) return;
     _isProcessing = true;
 
-    state = AuthState(operationType: 'login');
-    state = state.copyWith(status: AuthStatus.loading);
+    state = state.copyWith(status: AuthStatus.loading, operationType: 'login');
 
     final result = await _loginUseCase(
       email: email,
@@ -154,7 +156,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       ),
     );
 
-    _isProcessing = false; // Reset flag setelah selesai
+    _isProcessing = false;
   }
 }
 

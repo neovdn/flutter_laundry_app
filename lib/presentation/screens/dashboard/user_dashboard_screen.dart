@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_laundry_app/presentation/providers/order_provider.dart'
+    as order_provider; // Ubah alias menjadi lower_case_with_underscores
+import 'package:flutter_laundry_app/presentation/style/app_typography.dart';
 import 'package:flutter_laundry_app/presentation/style/colors/background_colors.dart';
 import 'package:flutter_laundry_app/presentation/style/colors/text_colors.dart';
-import 'package:flutter_laundry_app/presentation/style/typography.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/icon_sizes.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/padding_sizes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 
 class UserDashboardScreen extends ConsumerWidget {
-  static const routeName = '/user-dashboard';
+  static const routeName = '/user-dashboard-screen';
 
   const UserDashboardScreen({super.key});
 
@@ -18,24 +22,29 @@ class UserDashboardScreen extends ConsumerWidget {
     final user = authState.user;
 
     return Scaffold(
-      backgroundColor: BackgroundColors.secondary,
+      backgroundColor: BackgroundColors.dashboardBackground,
       appBar: AppBar(
-        backgroundColor: BackgroundColors.secondary,
+        backgroundColor: BackgroundColors.appBarBackground,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Dashboard',
-              style: AppTypography.heading4,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: PaddingSizes.dashboardHorizontal,
+              ),
+              child: Text(
+                'Dashboard',
+                style: AppTypography.appBarTitle,
+              ),
             ),
             IconButton(
               icon: const Icon(
                 Icons.logout,
-                color: TextColors.quaternary,
+                size: IconSizes.logout,
+                color: TextColors.lightText,
               ),
               onPressed: () {
-                ref.read(authProvider.notifier).resetState();
-                context.go('/login'); // Kembali ke login dan bersihkan stack
+                _handleLogout(context, ref);
               },
             ),
           ],
@@ -47,48 +56,67 @@ class UserDashboardScreen extends ConsumerWidget {
             user == null
                 ? const Center(child: CircularProgressIndicator())
                 : Expanded(
-                    // Add this Expanded widget
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: PaddingSizes
+                                .sectionTitlePadding, // Updated from medium
+                            vertical: PaddingSizes.dashboardVertical,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Selamat Datang!',
-                                style: AppTypography.heading2,
+                                'Welcome!',
+                                style: AppTypography.welcomeIntro,
                               ),
                               Text(
                                 'Customer ${user.fullName}',
-                                style: AppTypography.heading1,
+                                style: AppTypography.welcomeFullName,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
                         ),
                         Expanded(
-                          // Add this Expanded widget
                           child: Container(
-                              width: double.infinity, // Ensure full width
-                              decoration: BoxDecoration(
-                                color: BackgroundColors.primary,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(24),
-                                  topRight: Radius.circular(24),
-                                ),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: BackgroundColors.contentContainer,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(24),
+                                topRight: Radius.circular(24),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    // Baris pertama SVG
-                                    Row(
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(PaddingSizes
+                                  .contentContainerPadding), // Updated from small
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(PaddingSizes
+                                        .formOuterPadding), // Updated from moderate
+                                    child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.start,
                                       children: [
-                                        SizedBox(
+                                        Text(
+                                          'Our services',
+                                          style: AppTypography.sectionTitle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          context.go('/order-tracking-screen');
+                                        },
+                                        child: SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -102,7 +130,32 @@ class UserDashboardScreen extends ConsumerWidget {
                                             fit: BoxFit.contain,
                                           ),
                                         ),
-                                        SizedBox(
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.48,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.48,
+                                          child: SvgPicture.asset(
+                                            'assets/svg/history.svg',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: SizedBox(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -116,17 +169,13 @@ class UserDashboardScreen extends ConsumerWidget {
                                             fit: BoxFit.contain,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                    // Baris kedua SVG
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [],
-                                    ),
-                                  ],
-                                ),
-                              )),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -135,5 +184,26 @@ class UserDashboardScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
+    navigateToLogin() => context.go('/login-screen');
+
+    try {
+      // Gunakan alias order_provider untuk firebaseAuthProvider
+      await ref.read(order_provider.firebaseAuthProvider).signOut();
+      ref.invalidate(order_provider.currentUserUniqueNameProvider);
+      ref.invalidate(order_provider.customerOrdersProvider);
+
+      if (context.mounted) {
+        navigateToLogin();
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error signing out: $e')),
+        );
+      }
+    }
   }
 }

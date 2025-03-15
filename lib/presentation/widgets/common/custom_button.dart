@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_laundry_app/presentation/style/app_typography.dart';
 import 'package:flutter_laundry_app/presentation/style/colors/button_colors.dart';
 import 'package:flutter_laundry_app/presentation/style/colors/text_colors.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/button_sizes.dart';
+
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -17,9 +20,9 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     this.color,
     this.textColor,
-    this.height = 50,
+    this.height = ButtonSizes.defaultHeight, // Use defined default
     this.width = double.infinity, // Default width full
-    this.borderRadius = 8,
+    this.borderRadius = ButtonSizes.borderRadius, // Use defined default
   });
 
   @override
@@ -30,19 +33,16 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: color ?? ButtonColors.primary,
-          foregroundColor: textColor ?? TextColors.quaternary,
+          backgroundColor: color ?? ButtonColors.loadingIndicatorDefault,
+          foregroundColor: textColor ?? TextColors.lightText,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
           ),
-          minimumSize: Size(width, height), // Tambahkan ini
+          minimumSize: Size(width, height),
         ),
         child: Text(
           text,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTypography.customButtonText, // Use defined typography
         ),
       ),
     );

@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_laundry_app/presentation/style/app_typography.dart';
+import 'package:flutter_laundry_app/presentation/style/colors/background_colors.dart';
+import 'package:flutter_laundry_app/presentation/style/colors/text_colors.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/button_sizes.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/icon_sizes.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/padding_sizes.dart';
+import 'package:flutter_laundry_app/presentation/style/sizes/margin_sizes.dart';
+
 import 'package:flutter_laundry_app/presentation/widgets/common/app_logo_widget.dart';
 import 'package:flutter_laundry_app/presentation/widgets/common/custom_text.dart';
 import 'package:flutter_laundry_app/presentation/widgets/common/custom_text_form_field.dart';
@@ -10,8 +18,7 @@ import '../../widgets/common/loading_indicator.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
-  static const routeName = '/register';
-
+  static const routeName = '/register-screen';
   const RegisterScreen({super.key});
 
   @override
@@ -26,14 +33,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _uniqueNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _addressController = TextEditingController();
   final _phoneNumberController = TextEditingController();
+  final _addressController = TextEditingController();
   bool _isPasswordVisible = false;
 
   @override
   void initState() {
     super.initState();
-    // Reset auth state when entering screen
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(authProvider.notifier).resetState();
     });
@@ -43,6 +49,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   void dispose() {
     _roleController.dispose();
     _fullNameController.dispose();
+    _uniqueNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _phoneNumberController.dispose();
@@ -72,18 +79,19 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
       if (authState.status == AuthStatus.success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Registrasi berhasil!'),
-            backgroundColor: Colors.green,
+          SnackBar(
+            content: Text('Registration successful!',
+                style: AppTypography.buttonText
+                    .copyWith(color: TextColors.lightText)),
+            backgroundColor: BackgroundColors.success,
           ),
         );
 
         if (mounted) {
-          // Cek role dan arahkan ke halaman yang sesuai
           if (_roleController.text.trim() == 'Customer') {
-            context.go('/user-dashboard');
+            context.go('/user-dashboard-screen');
           } else if (_roleController.text.trim() == 'Worker') {
-            context.go('/admin-dashboard');
+            context.go('/admin-dashboard-screen');
           }
         }
       } else if (authState.status == AuthStatus.error &&
@@ -91,8 +99,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(authState.failure!.message),
-            backgroundColor: Colors.red,
+            content: Text(authState.failure!.message,
+                style: AppTypography.errorText),
+            backgroundColor: BackgroundColors.error,
           ),
         );
       }
@@ -106,9 +115,26 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.chevron_left,
+                    size: IconSizes.navigationIcon,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                Text(
+                  'Select Role',
+                  style: AppTypography.modalTitle,
+                ),
+                const SizedBox(width: 48),
+              ],
+            ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Customer'),
+              leading: Icon(Icons.person, size: IconSizes.formIcon),
+              title: Text('Customer', style: AppTypography.label),
               onTap: () {
                 setState(() {
                   _roleController.text = 'Customer';
@@ -117,8 +143,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.work),
-              title: Text('Worker'),
+              leading: Icon(Icons.work, size: IconSizes.formIcon),
+              title: Text('Worker', style: AppTypography.label),
               onTap: () {
                 setState(() {
                   _roleController.text = 'Worker';
@@ -132,94 +158,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
   }
 
-  // void _showAddressForm() {
-  //   TextEditingController streetController = TextEditingController();
-  //   TextEditingController houseNumberController = TextEditingController();
-  //   TextEditingController districtController = TextEditingController();
-  //   TextEditingController cityController = TextEditingController();
-  //   TextEditingController provinceController = TextEditingController();
-  //   TextEditingController postalCodeController = TextEditingController();
-
-  //   showModalBottomSheet(
-  //     context: context,
-  //     isScrollControlled: true,
-  //     builder: (context) {
-  //       return Padding(
-  //         padding: EdgeInsets.only(
-  //           bottom: MediaQuery.of(context).viewInsets.bottom,
-  //           left: 16,
-  //           right: 16,
-  //           top: 16,
-  //         ),
-  //         child: SingleChildScrollView(
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               CustomTextFormField(
-  //                 controller: streetController,
-  //                 hintText: 'Masukkan Nama Jalan',
-  //                 labelText: 'Nama Jalan',
-  //                 prefixIcon: Icons.location_on,
-  //               ),
-  //               const SizedBox(height: 8),
-  //               CustomTextFormField(
-  //                 controller: houseNumberController,
-  //                 hintText: 'Masukkan Nomor Rumah',
-  //                 labelText: 'Nomor Rumah',
-  //                 prefixIcon: Icons.home,
-  //                 keyboardType: TextInputType.number,
-  //               ),
-  //               const SizedBox(height: 8),
-  //               CustomTextFormField(
-  //                 controller: districtController,
-  //                 hintText: 'Masukkan Kelurahan/Kecamatan',
-  //                 labelText: 'Kelurahan/Kecamatan',
-  //                 prefixIcon: Icons.location_city,
-  //               ),
-  //               const SizedBox(height: 8),
-  //               CustomTextFormField(
-  //                 controller: cityController,
-  //                 hintText: 'Masukkan Kota/Kabupaten',
-  //                 labelText: 'Kota/Kabupaten',
-  //                 prefixIcon: Icons.apartment,
-  //               ),
-  //               const SizedBox(height: 8),
-  //               CustomTextFormField(
-  //                 controller: provinceController,
-  //                 hintText: 'Masukkan Provinsi',
-  //                 labelText: 'Provinsi',
-  //                 prefixIcon: Icons.map,
-  //               ),
-  //               const SizedBox(height: 8),
-  //               CustomTextFormField(
-  //                 controller: postalCodeController,
-  //                 hintText: 'Masukkan Kode Pos',
-  //                 labelText: 'Kode Pos',
-  //                 prefixIcon: Icons.local_post_office,
-  //                 keyboardType: TextInputType.number,
-  //               ),
-  //               const SizedBox(height: 16),
-  //               CustomButton(
-  //                 text: 'Selesai',
-  //                 onPressed: () {
-  //                   setState(() {
-  //                     _addressController.text =
-  //                         '${streetController.text}, No. ${houseNumberController.text}, '
-  //                         '${districtController.text}, ${cityController.text}, '
-  //                         '${provinceController.text}, ${postalCodeController.text}';
-  //                   });
-  //                   Navigator.pop(context);
-  //                 },
-  //               ),
-  //               const SizedBox(height: 16),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
@@ -229,13 +167,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 12),
+            const SizedBox(
+                height: MarginSizes.screenEdgeSpacing), // Updated from moderate
             const AppLogoWidget(),
-            const SizedBox(height: 24),
+            const SizedBox(
+                height: MarginSizes.screenEdgeSpacing), // Updated from large
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(PaddingSizes.formPadding),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -243,49 +183,50 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       children: [
                         CustomTextFormField(
                           controller: _roleController,
-                          hintText: 'Pilih Peran',
-                          labelText: 'Peran',
+                          hintText: 'Select Role',
+                          labelText: 'Role',
                           prefixIcon: Icons.manage_accounts,
-                          suffixIcon: Icon(Icons.arrow_drop_down),
-                          readOnly: true, // Agar tidak bisa diketik manual
+                          suffixIcon: Icon(Icons.arrow_drop_down,
+                              size: IconSizes.formIcon),
+                          readOnly: true,
                           onTap: _showRoleSelection,
                           validator: Validators.validateRole,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: MarginSizes.logoSpacing),
                         CustomTextFormField(
                           controller: _fullNameController,
                           hintText: _roleController.text == 'Worker'
-                              ? 'Masukkan Nama Laundry'
-                              : 'Masukkan Nama Lengkap',
+                              ? 'Input Laundry Name'
+                              : 'Input Full Name',
                           labelText: _roleController.text == 'Worker'
-                              ? 'Nama Laundry'
-                              : 'Nama Lengkap',
+                              ? 'Laundry Name'
+                              : 'Full Name',
                           prefixIcon: Icons.person,
                           textInputAction: TextInputAction.next,
                           validator: Validators.validateFullName,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: MarginSizes.logoSpacing),
                         CustomTextFormField(
                           controller: _uniqueNameController,
-                          hintText: 'Masukkan Nama Unik',
-                          labelText: 'Nama Unik',
+                          hintText: 'Input Unique Name',
+                          labelText: 'Unique Name',
                           prefixIcon: Icons.badge,
                           textInputAction: TextInputAction.next,
                           validator: Validators.validateUniqueName,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: MarginSizes.logoSpacing),
                         CustomTextFormField(
                           controller: _emailController,
-                          hintText: 'Masukkan Email',
+                          hintText: 'Input Email',
                           labelText: 'Email',
                           prefixIcon: Icons.email,
                           textInputAction: TextInputAction.next,
                           validator: Validators.validateEmail,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: MarginSizes.logoSpacing),
                         CustomTextFormField(
                           controller: _passwordController,
-                          hintText: 'Masukkan Password',
+                          hintText: 'Input Password',
                           labelText: 'Password',
                           prefixIcon: Icons.password,
                           suffixIcon: IconButton(
@@ -293,6 +234,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                               _isPasswordVisible
                                   ? Icons.visibility
                                   : Icons.visibility_off,
+                              size: IconSizes.formIcon,
                             ),
                             onPressed: _togglePasswordVisibility,
                           ),
@@ -300,58 +242,46 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           textInputAction: TextInputAction.next,
                           validator: Validators.validatePassword,
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: MarginSizes.logoSpacing),
                         CustomTextFormField(
                           controller: _phoneNumberController,
-                          hintText: 'Masukkan Nomer WhatsApp',
-                          labelText: 'Nomer WhatsApp',
+                          hintText: 'Input WhatsApp Number',
+                          labelText: 'WhatsApp Number',
                           prefixIcon: Icons.phone,
                           keyboardType: TextInputType.phone,
                           textInputAction: TextInputAction.done,
                           validator: Validators.validatePhoneNumber,
                         ),
-                        const SizedBox(height: 12),
-                        // CustomTextFormField(
-                        //   controller: _addressController,
-                        //   hintText: _roleController.text == 'Worker'
-                        //       ? 'Masukkan Alamat Laundry'
-                        //       : 'Masukkan Alamat Rumah',
-                        //   labelText: _roleController.text == 'Worker'
-                        //       ? 'Alamat Laundry'
-                        //       : 'Alamat Rumah',
-                        //   prefixIcon: Icons.location_on,
-                        //   readOnly: true, // Mencegah input manual
-                        //   onTap: _showAddressForm,
-                        //   validator: Validators.validateAddress,
-                        // ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: MarginSizes.logoSpacing),
                         authState.status == AuthStatus.loading
                             ? const LoadingIndicator()
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   CustomButton(
-                                    width: 110,
-                                    text: 'Daftar',
+                                    width: ButtonSizes.registerButtonWidth,
+                                    text: 'Register',
                                     onPressed: _submitRegisterForm,
                                   ),
                                 ],
-                              )
+                              ),
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(
+                height: MarginSizes.screenEdgeSpacing), // Updated from large
             CustomText(
-              normalText: 'Sudah Punya Akun? ',
-              highlightedText: 'Masuk',
+              normalText: 'Already have an account? ',
+              highlightedText: 'Log in',
               onTap: () {
-                context.push('/login');
+                context.push('/login-screen');
               },
             ),
-            const SizedBox(height: 12),
+            const SizedBox(
+                height: MarginSizes.screenEdgeSpacing), // Updated from large
           ],
         ),
       ),

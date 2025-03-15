@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_laundry_app/presentation/style/colors/text_colors.dart';
+import 'package:flutter_laundry_app/presentation/style/app_typography.dart';
 
 class CustomText extends StatelessWidget {
   final String normalText;
@@ -21,19 +21,12 @@ class CustomText extends StatelessWidget {
         children: [
           TextSpan(
             text: normalText,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black, // Warna hitam untuk teks biasa
-            ),
+            style: AppTypography.customTextNormal, // Use defined style
           ),
           TextSpan(
             text: highlightedText,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: TextColors.quinary, // Warna biru muda untuk "Register"
-            ),
-            recognizer: TapGestureRecognizer()..onTap = onTap, // Hilangkan padding default
+            style: AppTypography.customTextHighlighted, // Use defined style
+            recognizer: TapGestureRecognizer()..onTap = onTap,
           ),
         ],
       ),
