@@ -1,7 +1,16 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class BackgroundColors {
-  static const Color primary = Color(0xFFFFFFFF);
-  static const Color secondary = Color(0xFF95BBE3);
-  static const Color card = Color(0xFFDFEBF7);
+  // General colors
+  static const Color formFieldFill = Color(0xFFFFFFFF); // Text field background
+  static const Color card = Color(0xFFFFFFFF); // Card background
+  static const Color transparent = Colors.transparent; // Transparent background
+  static const Color success = Colors.green; // Success state background
+  static const Color error = Colors.red; // Error state background
+
+  // Feature-specific colors
+  static const Color dashboardBackground = Color(0xFF95BBE3); // Dashboard background
+  static const Color appBarBackground = Color(0xFF95BBE3); // AppBar background
+  static const Color contentContainer = Color(0xFFFFFFFF); // White container background
+  static const Color avatarBackground = Color(0xFFFFFFFF); // Avatar background
 }
