@@ -50,11 +50,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAXt6ekHfyIaFmoeJElA3eAUGIFnm4P0xc',
-    appId: '1:410440240900:android:51417c0b63307b3bc78a51',
-    messagingSenderId: '410440240900',
-    projectId: 'yolo-kasir',
-    storageBucket: 'yolo-kasir.firebasestorage.app',
+    apiKey: 'AIzaSyAzY9jDD1SpnN7-QIe07ynO9MOe_PPdOrw',
+    appId: '1:1039249932081:android:b5651715e68129038aba10',
+    messagingSenderId: '1039249932081',
+    projectId: 'flutter-laundry-app-6eee2',
+    storageBucket: 'flutter-laundry-app-6eee2.firebasestorage.app',
   );
 
   static const FirebaseOptions web = FirebaseOptions(
