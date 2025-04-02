@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1039249932081",
-    "project_id": "flutter-laundry-app-6eee2",
-    "storage_bucket": "flutter-laundry-app-6eee2.firebasestorage.app"
+    "project_number": "410440240900",
+    "project_id": "yolo-kasir",
+    "storage_bucket": "yolo-kasir.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1039249932081:android:b5651715e68129038aba10",
+        "mobilesdk_app_id": "1:410440240900:android:51417c0b63307b3bc78a51",
         "android_client_info": {
           "package_name": "com.example.flutter_laundry_app"
         }
@@ -15,7 +15,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAzY9jDD1SpnN7-QIe07ynO9MOe_PPdOrw"
+          "current_key": "AIzaSyAXt6ekHfyIaFmoeJElA3eAUGIFnm4P0xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410440240900:android:929e28a9f2288d63c78a51",
+        "android_client_info": {
+          "package_name": "com.example.yolo_kasir"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXt6ekHfyIaFmoeJElA3eAUGIFnm4P0xc"
         }
       ],
       "services": {

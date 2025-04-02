@@ -1,0 +1,45 @@
+// The Android Gradle Plugin builds the native code with the Android NDK.
+
+group 'org.tensorflow.tflite_flutter'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        // The Android Gradle Plugin knows how to build native code with the NDK.
+        classpath 'com.android.tools.build:gradle:7.3.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdk 31
+    namespace 'org.tensorflow.tflite_flutter'
+    defaultConfig {
+        minSdk 19
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+
+dependencies {
+    def tflite_version = "2.11.0"
+    
+    implementation("org.tensorflow:tensorflow-lite:${tflite_version}")
+    implementation("org.tensorflow:tensorflow-lite-gpu:${tflite_version}")
+}

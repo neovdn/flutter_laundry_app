@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -53,10 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAzY9jDD1SpnN7-QIe07ynO9MOe_PPdOrw',
-    appId: '1:1039249932081:android:b5651715e68129038aba10',
-    messagingSenderId: '1039249932081',
-    projectId: 'flutter-laundry-app-6eee2',
-    storageBucket: 'flutter-laundry-app-6eee2.firebasestorage.app',
+    apiKey: 'AIzaSyAXt6ekHfyIaFmoeJElA3eAUGIFnm4P0xc',
+    appId: '1:410440240900:android:51417c0b63307b3bc78a51',
+    messagingSenderId: '410440240900',
+    projectId: 'yolo-kasir',
+    storageBucket: 'yolo-kasir.firebasestorage.app',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCLCx47TfVfS9CAZtbzwhlfDCY1N1OrCyk',
+    appId: '1:410440240900:web:d1ee7f0934b622c6c78a51',
+    messagingSenderId: '410440240900',
+    projectId: 'yolo-kasir',
+    authDomain: 'yolo-kasir.firebaseapp.com',
+    storageBucket: 'yolo-kasir.firebasestorage.app',
+  );
+
 }

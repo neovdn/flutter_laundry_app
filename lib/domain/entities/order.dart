@@ -10,6 +10,8 @@ class Order {
   final double totalPrice;
   final DateTime createdAt;
   final DateTime estimatedCompletion;
+  final DateTime? completedAt;
+  final DateTime? cancelledAt;
   final DateTime? updatedAt;
 
   Order({
@@ -22,8 +24,10 @@ class Order {
     required this.weight,
     required this.status,
     required this.totalPrice,
-    required this.estimatedCompletion,
     required this.createdAt,
+    required this.estimatedCompletion,
+    this.completedAt,
+    this.cancelledAt,
     this.updatedAt,
   });
 }

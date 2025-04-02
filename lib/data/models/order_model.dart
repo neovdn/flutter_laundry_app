@@ -14,6 +14,8 @@ class OrderModel extends Order {
     required super.totalPrice,
     required super.createdAt,
     required super.estimatedCompletion,
+    super.completedAt,
+    super.cancelledAt,
     super.updatedAt,
   });
 
@@ -43,6 +45,10 @@ class OrderModel extends Order {
       totalPrice: json['totalPrice'] as double? ?? 0,
       createdAt: getDateTime(json['createdAt']),
       estimatedCompletion: getDateTime(json['estimatedCompletion']),
+      completedAt:
+          json['completedAt'] != null ? getDateTime(json['completedAt']) : null,
+      cancelledAt:
+          json['cancelledAt'] != null ? getDateTime(json['cancelledAt']) : null,
       updatedAt:
           json['updatedAt'] != null ? getDateTime(json['updatedAt']) : null,
     );
@@ -61,6 +67,11 @@ class OrderModel extends Order {
       'totalPrice': totalPrice,
       'createdAt': Timestamp.fromDate(createdAt),
       'estimatedCompletion': Timestamp.fromDate(estimatedCompletion),
+      'completedAt':
+          completedAt != null ? Timestamp.fromDate(completedAt!) : null,
+      'cancelledAt': cancelledAt != null
+          ? Timestamp.fromDate(cancelledAt!)
+          : null, // Perbaiki typo dan logika
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
     };
   }
@@ -78,8 +89,30 @@ class OrderModel extends Order {
       'totalPrice': totalPrice,
       'createdAt': createdAt.toIso8601String(),
       'estimatedCompletion': estimatedCompletion.toIso8601String(),
+      'completedAt': completedAt?.toIso8601String(),
+      'cancelledAt': cancelledAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
+  }
+
+  // Add fromEntity method to convert Order entity to OrderModel
+  factory OrderModel.fromEntity(Order order) {
+    return OrderModel(
+      id: order.id,
+      laundryUniqueName: order.laundryUniqueName,
+      customerUniqueName: order.customerUniqueName,
+      clothes: order.clothes,
+      laundrySpeed: order.laundrySpeed,
+      vouchers: order.vouchers,
+      weight: order.weight,
+      status: order.status,
+      totalPrice: order.totalPrice,
+      createdAt: order.createdAt,
+      estimatedCompletion: order.estimatedCompletion,
+      completedAt: order.completedAt,
+      cancelledAt: order.cancelledAt,
+      updatedAt: order.updatedAt,
+    );
   }
 
   // Updated copyWith to match the Order entity properties
@@ -95,6 +128,8 @@ class OrderModel extends Order {
     double? totalPrice,
     DateTime? createdAt,
     DateTime? estimatedCompletion,
+    DateTime? completedAt,
+    DateTime? cancelledAt,
     DateTime? updatedAt,
   }) {
     return OrderModel(
@@ -109,6 +144,8 @@ class OrderModel extends Order {
       totalPrice: totalPrice ?? this.totalPrice,
       createdAt: createdAt ?? this.createdAt,
       estimatedCompletion: estimatedCompletion ?? this.estimatedCompletion,
+      completedAt: completedAt ?? this.completedAt,
+      cancelledAt: cancelledAt ?? this.cancelledAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
@@ -130,6 +167,8 @@ class OrderModel extends Order {
           totalPrice == other.totalPrice &&
           createdAt == other.createdAt &&
           estimatedCompletion == other.estimatedCompletion &&
+          completedAt == other.completedAt &&
+          cancelledAt == other.cancelledAt &&
           updatedAt == other.updatedAt;
 
   @override
@@ -145,6 +184,8 @@ class OrderModel extends Order {
         totalPrice,
         createdAt,
         estimatedCompletion,
+        completedAt,
+        cancelledAt,
         updatedAt,
       );
 }

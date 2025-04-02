@@ -80,18 +80,21 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       if (authState.status == AuthStatus.success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Registration successful!',
-                style: AppTypography.buttonText
-                    .copyWith(color: TextColors.lightText)),
+            content: Text(
+              'Registration successful!',
+              style: AppTypography.buttonText
+                  .copyWith(color: TextColors.lightText),
+            ),
             backgroundColor: BackgroundColors.success,
           ),
         );
 
         if (mounted) {
+          // Navigasi ke SplashScreen dengan parameter tujuan
           if (_roleController.text.trim() == 'Customer') {
-            context.go('/user-dashboard-screen');
+            context.go('/splash-screen?next=/user-dashboard-screen');
           } else if (_roleController.text.trim() == 'Worker') {
-            context.go('/admin-dashboard-screen');
+            context.go('/splash-screen?next=/admin-dashboard-screen');
           }
         }
       } else if (authState.status == AuthStatus.error &&

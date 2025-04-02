@@ -8,6 +8,7 @@ abstract class FirebaseDatabaseRemoteDataSource {
   Future<UserModel> getUser();
   Future<UserModel> updateLaundryPrice(int regulerPrice, int expressPrice);
   Future<OrderModel> createOrder(OrderModel order);
+  Future<List<OrderModel>> getActiveOrders();
 }
 
 class FirebaseDatabaseRemoteDataSourceImpl
@@ -43,7 +44,8 @@ class FirebaseDatabaseRemoteDataSourceImpl
   }
 
   @override
-  Future<UserModel> updateLaundryPrice(int regulerPrice, int expressPrice) async {
+  Future<UserModel> updateLaundryPrice(
+      int regulerPrice, int expressPrice) async {
     try {
       final currentUser = firebaseAuth.currentUser;
       if (currentUser == null) {
@@ -77,10 +79,24 @@ class FirebaseDatabaseRemoteDataSourceImpl
         throw ServerException();
       }
 
-      // Use the custom ID that was already generated
       final orderRef = firestore.collection('orders').doc(order.id);
-      await orderRef.set(order.toJson());
+      await orderRef.set(order.toMap());
       return order;
+    } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<OrderModel>> getActiveOrders() async {
+    try {
+      final snapshot = await firestore
+          .collection('orders')
+          .where('status', isEqualTo: 'active')
+          .get();
+      return snapshot.docs
+          .map((doc) => OrderModel.fromJson(doc.data(), doc.id))
+          .toList();
     } catch (e) {
       throw ServerException();
     }

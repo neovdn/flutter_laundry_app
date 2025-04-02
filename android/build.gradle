@@ -1,13 +1,12 @@
 buildscript {
-    // Your existing repositories and dependencies here
     repositories {
         google()
         mavenCentral()
     }
-    
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.1'
-        // Your other classpath dependencies like Flutter and Kotlin
+        classpath 'com.android.tools.build:gradle:8.1.0' 
+        classpath 'com.google.gms:google-services:4.4.2' // Tambahkan ini
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.20'
     }
 }
 
@@ -26,11 +25,17 @@ allprojects {
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(":app")
+    
+    // Fix the namespace setting
+    if (project.name == "tflite_flutter") {
+        project.afterEvaluate {
+            if (project.hasProperty('android')) {
+                project.android.namespace = 'org.tensorflow.lite.flutter'
+            }
+        }
+    }
 }
-
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

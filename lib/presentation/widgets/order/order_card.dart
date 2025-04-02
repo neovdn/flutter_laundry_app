@@ -60,8 +60,7 @@ class OrderCard extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(
-                PaddingSizes.cardPadding), // Updated from medium
+            padding: const EdgeInsets.all(PaddingSizes.cardPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -93,7 +92,10 @@ class OrderCard extends ConsumerWidget {
                           style: AppTypography.date,
                         ),
                         Text(
-                          dateFormat.format(order.estimatedCompletion),
+                          order.status == 'completed' &&
+                                  order.completedAt != null
+                              ? dateFormat.format(order.completedAt!)
+                              : dateFormat.format(order.estimatedCompletion),
                           style: AppTypography.date,
                         ),
                       ],
@@ -138,9 +140,9 @@ class OrderCard extends ConsumerWidget {
                           ),
                           Text(
                             order.laundrySpeed == 'Express'
-                                ? '${order.laundrySpeed} (1 Day)'
+                                ? order.laundrySpeed
                                 : order.laundrySpeed == 'Reguler'
-                                    ? '${order.laundrySpeed} (2 Days)'
+                                    ? order.laundrySpeed
                                     : order.laundrySpeed,
                             style: AppTypography.laundrySpeed.copyWith(
                               fontSize: TextSizes.speedText,
@@ -212,15 +214,13 @@ class OrderCard extends ConsumerWidget {
           if (isAdmin) ...[
             const Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal:
-                      PaddingSizes.sectionTitlePadding), // Updated from medium
+                  horizontal: PaddingSizes.sectionTitlePadding),
               child: Divider(height: 1, color: BorderColors.divider),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: PaddingSizes.contentContainerPadding,
-                horizontal:
-                    PaddingSizes.sectionTitlePadding, // Updated from medium
+                horizontal: PaddingSizes.sectionTitlePadding,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -355,15 +355,13 @@ class OrderCard extends ConsumerWidget {
           if (!isAdmin) ...[
             const Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal:
-                      PaddingSizes.sectionTitlePadding), // Updated from medium
+                  horizontal: PaddingSizes.sectionTitlePadding),
               child: Divider(height: 1, color: BorderColors.divider),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: PaddingSizes.contentContainerPadding,
-                horizontal:
-                    PaddingSizes.sectionTitlePadding, // Updated from medium
+                horizontal: PaddingSizes.sectionTitlePadding,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

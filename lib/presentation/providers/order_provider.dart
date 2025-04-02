@@ -1,11 +1,13 @@
 // ignore_for_file: unused_result
 
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
-import 'package:flutter_laundry_app/core/utils/date_estimator.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter_laundry_app/core/error/failures.dart';
 import 'package:flutter_laundry_app/data/datasources/remote/firebase_database_remote_data_source.dart';
 import 'package:flutter_laundry_app/data/models/order_model.dart';
 import 'package:flutter_laundry_app/data/repositories/order_repository_impl.dart';
 import 'package:flutter_laundry_app/domain/repositories/order_repository.dart';
+import 'package:flutter_laundry_app/domain/usecases/order/predict_completion_time_usecase.dart';
 import 'package:flutter_laundry_app/presentation/providers/user_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/utils/order_number_generator.dart';
@@ -15,18 +17,44 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class OrderState {
   final bool isLoading;
+  final bool isLoadingPrediction; // Tambahkan properti ini
   final String? errorMessage;
+  final DateTime? predictedCompletion;
 
-  OrderState({this.isLoading = false, this.errorMessage});
+  OrderState({
+    this.isLoading = false,
+    this.isLoadingPrediction = false, // Default false
+    this.errorMessage,
+    this.predictedCompletion,
+  });
+
+  OrderState copyWith({
+    bool? isLoading,
+    bool? isLoadingPrediction,
+    String? errorMessage,
+    DateTime? predictedCompletion,
+  }) {
+    return OrderState(
+      isLoading: isLoading ?? this.isLoading,
+      isLoadingPrediction: isLoadingPrediction ?? this.isLoadingPrediction,
+      errorMessage: errorMessage ?? this.errorMessage,
+      predictedCompletion: predictedCompletion ?? this.predictedCompletion,
+    );
+  }
 }
 
 class OrderNotifier extends StateNotifier<OrderState> {
   final CreateOrderUseCase createOrderUseCase;
+  final PredictCompletionTimeUseCase predictCompletionTimeUseCase;
   final firebase_auth.FirebaseAuth firebaseAuth;
   final Ref ref;
 
-  OrderNotifier(this.createOrderUseCase, this.firebaseAuth, this.ref)
-      : super(OrderState());
+  OrderNotifier({
+    required this.createOrderUseCase,
+    required this.predictCompletionTimeUseCase,
+    required this.firebaseAuth,
+    required this.ref,
+  }) : super(OrderState());
 
   Future<void> createOrder(
     String customerUniqueName,
@@ -36,12 +64,12 @@ class OrderNotifier extends StateNotifier<OrderState> {
     List<String> vouchers,
     double totalPrice,
   ) async {
-    state = OrderState(isLoading: true);
-    final id = OrderNumberGenerator.generateUniqueNumber();
+    state = state.copyWith(isLoading: true, errorMessage: null);
 
+    final id = OrderNumberGenerator.generateUniqueNumber();
     final currentUser = firebaseAuth.currentUser;
     if (currentUser == null) {
-      state = OrderState(
+      state = state.copyWith(
         isLoading: false,
         errorMessage: 'No user logged in',
       );
@@ -52,8 +80,7 @@ class OrderNotifier extends StateNotifier<OrderState> {
       final user = await ref.read(currentUserProvider.future);
       final laundryUniqueName = user.uniqueName;
 
-      final estimatedCompletion =
-          DateEstimator.calculateEstimatedCompletion(laundrySpeed);
+      ref.read(orderRepositoryProvider);
 
       final order = domain.Order(
         id: id,
@@ -66,21 +93,80 @@ class OrderNotifier extends StateNotifier<OrderState> {
         totalPrice: totalPrice,
         status: 'pending',
         createdAt: DateTime.now(),
-        estimatedCompletion: estimatedCompletion,
+        estimatedCompletion: state.predictedCompletion ?? DateTime.now(),
       );
 
       final result = await createOrderUseCase(order);
       result.fold(
-        (failure) =>
-            state = OrderState(isLoading: false, errorMessage: failure.message),
-        (_) => state = OrderState(isLoading: false),
+        (failure) {
+          state = state.copyWith(
+            isLoading: false,
+            errorMessage: failure.message,
+          );
+        },
+        (_) {
+          state = state.copyWith(
+            isLoading: false,
+          );
+        },
       );
     } catch (e) {
-      state = OrderState(
+      state = state.copyWith(
         isLoading: false,
         errorMessage: e.toString(),
       );
     }
+  }
+
+  Future<Either<Failure, DateTime?>> predictCompletionTime({
+    required double weight,
+    required int clothes,
+    required String laundrySpeed,
+  }) async {
+    state = state.copyWith(isLoadingPrediction: true, errorMessage: null);
+
+    final orderModel = OrderModel(
+      id: '',
+      laundryUniqueName: '',
+      customerUniqueName: '',
+      weight: weight,
+      clothes: clothes,
+      laundrySpeed: laundrySpeed,
+      vouchers: [],
+      totalPrice: 0.0,
+      status: 'pending',
+      createdAt: DateTime.now(),
+      estimatedCompletion: DateTime.now(),
+    );
+
+    final result = await predictCompletionTimeUseCase(orderModel);
+
+    result.fold(
+      (failure) {
+        state = state.copyWith(
+          isLoadingPrediction: false,
+          errorMessage: failure.message,
+          predictedCompletion: null,
+        );
+      },
+      (predictedCompletion) {
+        state = state.copyWith(
+          isLoadingPrediction: false,
+          predictedCompletion: predictedCompletion,
+        );
+      },
+    );
+
+    return result;
+  }
+
+  void resetPrediction() {
+    state = OrderState(
+      isLoading: state.isLoading,
+      isLoadingPrediction: false,
+      errorMessage: state.errorMessage,
+      predictedCompletion: null,
+    );
   }
 }
 
@@ -88,8 +174,21 @@ class OrderNotifier extends StateNotifier<OrderState> {
 final orderNotifierProvider =
     StateNotifierProvider<OrderNotifier, OrderState>((ref) {
   final createOrderUseCase = ref.read(createOrderUseCaseProvider);
+  final predictCompletionTimeUseCase =
+      ref.read(predictCompletionTimeUseCaseProvider);
   final firebaseAuth = ref.read(firebaseAuthProvider);
-  return OrderNotifier(createOrderUseCase, firebaseAuth, ref);
+  return OrderNotifier(
+    createOrderUseCase: createOrderUseCase,
+    predictCompletionTimeUseCase: predictCompletionTimeUseCase,
+    firebaseAuth: firebaseAuth,
+    ref: ref,
+  );
+});
+
+final predictCompletionTimeUseCaseProvider =
+    Provider<PredictCompletionTimeUseCase>((ref) {
+  final repository = ref.read(orderRepositoryProvider);
+  return PredictCompletionTimeUseCase(repository);
 });
 
 final firestoreProvider = Provider<firestore.FirebaseFirestore>((ref) {
@@ -225,7 +324,8 @@ class OrderActions {
   OrderActions({required this.repository, required this.ref});
 
   Future<void> updateOrderStatus(String orderId, String newStatus) async {
-    final result = await repository.updateOrderStatus(orderId, newStatus);
+    final result =
+        await repository.updateOrderStatusAndCompletion(orderId, newStatus);
     result.fold(
       (failure) => throw Exception(failure.message),
       (_) {

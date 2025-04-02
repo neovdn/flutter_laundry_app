@@ -75,25 +75,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         if (mounted) {
           final String? role = authState.user?.role;
 
+          // Navigasi ke SplashScreen dengan parameter tujuan
           if (role == 'Customer') {
-            context.go('/user-dashboard-screen');
+            context.go('/splash-screen?next=/user-dashboard-screen');
           } else if (role == 'Worker') {
-            context.go('/admin-dashboard-screen');
+            context.go('/splash-screen?next=/admin-dashboard-screen');
           } else {
-            context.go('/login-screen');
+            context.go('/splash-screen?next=/login-screen');
           }
         }
       } else if (authState.status == AuthStatus.error &&
           authState.failure != null &&
           mounted) {
-        // Use Validators to handle login errors
         Validators.handleLoginErrors(
           authState.failure!.message,
           (error) => setState(() => _emailError = error),
           (error) => setState(() => _passwordError = error),
         );
 
-        // Show general error if no field-specific error was set
         if (_emailError == null && _passwordError == null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

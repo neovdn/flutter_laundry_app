@@ -6,10 +6,16 @@ abstract class OrderRepository {
   Future<dartz.Either<Failure, void>> createOrder(Order order);
 
   Future<dartz.Either<Failure, List<Order>>> getOrders();
-  
+
   Future<dartz.Either<Failure, List<Order>>> getOrdersByStatus(String status);
-  
-  Future<dartz.Either<Failure, Order>> updateOrderStatus(String orderId, String newStatus);
-  
+
+  Future<dartz.Either<Failure, Order>> updateOrderStatus(
+      String orderId, String newStatus);
+
+  Future<dartz.Either<Failure, void>> updateOrderStatusAndCompletion(
+      String orderId, String newStatus);
+
   Future<dartz.Either<Failure, void>> deleteOrder(String orderId);
+
+  Future<List<Order>> getActiveOrders();
 }

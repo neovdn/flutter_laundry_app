@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// Alias for firebase_config.dart
 import 'package:flutter_laundry_app/presentation/providers/order_provider.dart';
 import 'package:flutter_laundry_app/presentation/style/app_typography.dart';
 import 'package:flutter_laundry_app/presentation/style/colors/background_colors.dart';
@@ -25,6 +24,9 @@ class AdminDashboardScreen extends ConsumerWidget {
       backgroundColor: BackgroundColors.dashboardBackground,
       appBar: AppBar(
         backgroundColor: BackgroundColors.appBarBackground,
+        shadowColor: BackgroundColors.transparent,
+        surfaceTintColor: BackgroundColors.transparent,
+        elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -61,8 +63,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: PaddingSizes
-                                .sectionTitlePadding, // Updated from medium
+                            horizontal: PaddingSizes.sectionTitlePadding,
                             vertical: PaddingSizes.dashboardVertical,
                           ),
                           child: Column(
@@ -91,13 +92,13 @@ class AdminDashboardScreen extends ConsumerWidget {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(PaddingSizes
-                                  .contentContainerPadding), // Updated from small
+                              padding: const EdgeInsets.all(
+                                  PaddingSizes.contentContainerPadding),
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(PaddingSizes
-                                        .formOuterPadding), // Updated from moderate
+                                    padding: const EdgeInsets.all(
+                                        PaddingSizes.formOuterPadding),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -109,129 +110,147 @@ class AdminDashboardScreen extends ConsumerWidget {
                                       ],
                                     ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          context.go('/create-order-screen');
-                                        },
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          child: SvgPicture.asset(
-                                            'assets/svg/create_order.svg',
-                                            fit: BoxFit.contain,
+                                  // Tambahkan SingleChildScrollView di sini
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  context.go(
+                                                      '/create-order-screen');
+                                                },
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  child: SvgPicture.asset(
+                                                    'assets/svg/create_order.svg',
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  context.go(
+                                                      '/manage-orders-screen');
+                                                },
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  child: SvgPicture.asset(
+                                                    'assets/svg/manage_orders.svg',
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          context.go('/manage-orders-screen');
-                                        },
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          child: SvgPicture.asset(
-                                            'assets/svg/manage_orders.svg',
-                                            fit: BoxFit.contain,
+                                          const SizedBox(
+                                              height: 16), // Jarak antar baris
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {},
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  child: SvgPicture.asset(
+                                                    'assets/svg/history.svg',
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {},
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  child: SvgPicture.asset(
+                                                    'assets/svg/create_voucher.svg',
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          child: SvgPicture.asset(
-                                            'assets/svg/history.svg',
-                                            fit: BoxFit.contain,
+                                          const SizedBox(
+                                              height: 16), // Jarak antar baris
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {},
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  child: SvgPicture.asset(
+                                                    'assets/svg/edit_voucher.svg',
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  context.go(
+                                                      '/price-management-screen');
+                                                },
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.48,
+                                                  child: SvgPicture.asset(
+                                                    'assets/svg/edit_price.svg',
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          child: SvgPicture.asset(
-                                            'assets/svg/create_voucher.svg',
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          child: SvgPicture.asset(
-                                            'assets/svg/edit_voucher.svg',
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          context
-                                              .go('/price-management-screen');
-                                        },
-                                        child: SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.48,
-                                          child: SvgPicture.asset(
-                                            'assets/svg/edit_price.svg',
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -247,9 +266,7 @@ class AdminDashboardScreen extends ConsumerWidget {
     );
   }
 
-  // New method to handle logout flow
   Future<void> _handleLogout(BuildContext context, WidgetRef ref) async {
-    // Store the navigation function before starting async work
     navigateToLogin() => context.go('/login-screen');
 
     try {
@@ -257,12 +274,10 @@ class AdminDashboardScreen extends ConsumerWidget {
       ref.invalidate(currentUserUniqueNameProvider);
       ref.invalidate(laundryOrdersProvider);
 
-      // Check if widget is still mounted before navigating
       if (context.mounted) {
         navigateToLogin();
       }
     } catch (e) {
-      // Handle any errors during sign out
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error signing out: $e')),

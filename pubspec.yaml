@@ -33,21 +33,22 @@ dependencies:
   firebase_core: ^3.12.0
   firebase_auth: ^5.5.0
   cloud_firestore: ^5.6.4
-  firebase_storage: 12.4.3
+  firebase_storage: ^12.4.4
   flutter_riverpod: ^2.6.1
   go_router: ^14.8.0
   flutter_svg: ^2.0.17
   internet_connection_checker: ^3.0.1
   dartz: ^0.10.1
-  
+  # tflite_flutter: ^0.11.0
+  tflite_flutter:
+    path: ./tflite_flutter-0.11.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   equatable: ^2.0.7
   intl: ^0.20.2
-
-
-
+  firebase_ml_model_downloader: ^0.3.3+2
+  permission_handler: ^11.4.0
 
 dev_dependencies:
   flutter_test:

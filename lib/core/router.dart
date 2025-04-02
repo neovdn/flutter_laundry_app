@@ -4,14 +4,20 @@ import 'package:flutter_laundry_app/presentation/screens/dashboard/admin_dashboa
 import 'package:flutter_laundry_app/presentation/screens/dashboard/user_dashboard_screen.dart';
 import 'package:flutter_laundry_app/presentation/screens/order/create_order_screen.dart';
 import 'package:flutter_laundry_app/presentation/screens/order/order_tracking_screen.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_laundry_app/presentation/screens/auth/login_screen.dart';
 import 'package:flutter_laundry_app/presentation/screens/auth/register_screen.dart';
+import 'package:flutter_laundry_app/presentation/screens/splash_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
+    initialLocation: '/splash-screen', // Atur splash screen sebagai rute awal
     routes: [
+      GoRoute(
+        path: '/splash-screen',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: '/',
         builder: (context, state) => const LoginScreen(),
@@ -40,7 +46,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/manage-orders-screen',
         builder: (context, state) => const ManageOrdersScreen(),
       ),
-        GoRoute(
+      GoRoute(
         path: '/order-tracking-screen',
         builder: (context, state) => const OrderTrackingScreen(),
       ),

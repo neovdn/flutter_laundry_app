@@ -13,4 +13,5 @@ class BackgroundColors {
   static const Color appBarBackground = Color(0xFF95BBE3); // AppBar background
   static const Color contentContainer = Color(0xFFFFFFFF); // White container background
   static const Color avatarBackground = Color(0xFFFFFFFF); // Avatar background
+  static const Color splashBackground = Color(0xFFFFFFFF); // Avatar background
 }

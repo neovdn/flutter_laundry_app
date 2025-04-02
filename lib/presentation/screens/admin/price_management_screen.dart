@@ -137,6 +137,9 @@ class _PriceManagementScreenState extends ConsumerState<PriceManagementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: BackgroundColors.transparent,
+        shadowColor: BackgroundColors.transparent,
+        surfaceTintColor: BackgroundColors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

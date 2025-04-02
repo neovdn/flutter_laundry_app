@@ -1,4 +1,3 @@
-// Then the repository implementation
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:dartz/dartz.dart' as dartz;
 import '../../core/error/failures.dart';
@@ -31,10 +30,12 @@ class OrderRepositoryImpl implements OrderRepository {
         totalPrice: order.totalPrice,
         createdAt: order.createdAt,
         estimatedCompletion: order.estimatedCompletion,
+        completedAt: order.completedAt,
+        cancelledAt: order.cancelledAt,
         updatedAt: order.updatedAt,
       );
       await remoteDataSource.createOrder(orderModel);
-      return dartz.Right(null);
+      return const dartz.Right(null);
     } catch (e) {
       return dartz.Left(OrderFailure(message: 'Failed to create order: $e'));
     }
@@ -49,14 +50,16 @@ class OrderRepositoryImpl implements OrderRepository {
           .toList();
       return dartz.Right(orders);
     } on firestore.FirebaseException catch (e) {
-      return dartz.Left(ServerFailure(message: e.message ?? 'Failed to fetch orders'));
+      return dartz.Left(
+          ServerFailure(message: e.message ?? 'Failed to fetch orders'));
     } catch (e) {
       return dartz.Left(ServerFailure(message: e.toString()));
     }
   }
 
   @override
-  Future<dartz.Either<Failure, List<domain.Order>>> getOrdersByStatus(String status) async {
+  Future<dartz.Either<Failure, List<domain.Order>>> getOrdersByStatus(
+      String status) async {
     try {
       final querySnapshot = await _firestore
           .collection('orders')
@@ -67,7 +70,8 @@ class OrderRepositoryImpl implements OrderRepository {
           .toList();
       return dartz.Right(orders);
     } on firestore.FirebaseException catch (e) {
-      return dartz.Left(ServerFailure(message: e.message ?? 'Failed to fetch orders'));
+      return dartz.Left(
+          ServerFailure(message: e.message ?? 'Failed to fetch orders'));
     } catch (e) {
       return dartz.Left(ServerFailure(message: e.toString()));
     }
@@ -82,18 +86,39 @@ class OrderRepositoryImpl implements OrderRepository {
         'updatedAt': firestore.FieldValue.serverTimestamp(),
       });
 
-      final docSnapshot = await _firestore.collection('orders').doc(orderId).get();
+      final docSnapshot =
+          await _firestore.collection('orders').doc(orderId).get();
       if (!docSnapshot.exists) {
         return dartz.Left(ServerFailure(message: 'Order not found'));
       }
 
-      final updatedOrder = OrderModel.fromJson(
-        docSnapshot.data()!,
-        docSnapshot.id,
-      );
+      final updatedOrder =
+          OrderModel.fromJson(docSnapshot.data()!, docSnapshot.id);
       return dartz.Right(updatedOrder);
     } on firestore.FirebaseException catch (e) {
-      return dartz.Left(ServerFailure(message: e.message ?? 'Failed to update order status'));
+      return dartz.Left(
+          ServerFailure(message: e.message ?? 'Failed to update order status'));
+    } catch (e) {
+      return dartz.Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<dartz.Either<Failure, void>> updateOrderStatusAndCompletion(
+      String orderId, String newStatus) async {
+    try {
+      final updateData = {
+        'status': newStatus,
+        'updatedAt': firestore.FieldValue.serverTimestamp(),
+        if (newStatus == 'completed')
+          'completedAt': firestore.FieldValue.serverTimestamp(),
+        if (newStatus == 'cancelled')
+          'cancelledAt':
+              firestore.FieldValue.serverTimestamp(), // Tambahkan ini
+      };
+
+      await _firestore.collection('orders').doc(orderId).update(updateData);
+      return const dartz.Right(null);
     } catch (e) {
       return dartz.Left(ServerFailure(message: e.toString()));
     }
@@ -105,9 +130,15 @@ class OrderRepositoryImpl implements OrderRepository {
       await _firestore.collection('orders').doc(orderId).delete();
       return const dartz.Right(null);
     } on firestore.FirebaseException catch (e) {
-      return dartz.Left(ServerFailure(message: e.message ?? 'Failed to delete order'));
+      return dartz.Left(
+          ServerFailure(message: e.message ?? 'Failed to delete order'));
     } catch (e) {
       return dartz.Left(ServerFailure(message: e.toString()));
     }
+  }
+
+  @override
+  Future<List<domain.Order>> getActiveOrders() async {
+    return await remoteDataSource.getActiveOrders();
   }
 }
