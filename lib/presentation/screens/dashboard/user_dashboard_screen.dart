@@ -165,7 +165,9 @@ class UserDashboardScreen extends ConsumerWidget {
                                                 MainAxisAlignment.start,
                                             children: [
                                               GestureDetector(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  context.go('/vouchers');
+                                                },
                                                 child: SizedBox(
                                                   width: MediaQuery.of(context)
                                                           .size

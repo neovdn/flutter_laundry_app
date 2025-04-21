@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_laundry_app/data/models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import '../../models/user_model.dart';
 import '../../models/order_model.dart';
+import '../../models/voucher_model.dart';
 import '../../../core/error/exceptions.dart';
 
 abstract class FirebaseDatabaseRemoteDataSource {
@@ -9,6 +10,8 @@ abstract class FirebaseDatabaseRemoteDataSource {
   Future<UserModel> updateLaundryPrice(int regulerPrice, int expressPrice);
   Future<OrderModel> createOrder(OrderModel order);
   Future<List<OrderModel>> getActiveOrders();
+  Future<VoucherModel> createVoucher(VoucherModel voucher);
+  Future<List<VoucherModel>> getVouchers();
 }
 
 class FirebaseDatabaseRemoteDataSourceImpl
@@ -98,6 +101,56 @@ class FirebaseDatabaseRemoteDataSourceImpl
           .map((doc) => OrderModel.fromJson(doc.data(), doc.id))
           .toList();
     } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<VoucherModel> createVoucher(VoucherModel voucher) async {
+    try {
+      final currentUser = firebaseAuth.currentUser;
+      if (currentUser == null) {
+        throw ServerException();
+      }
+
+      // Fetch the user's profile to get the store name
+      final userDoc =
+          await firestore.collection('users').doc(currentUser.uid).get();
+      if (!userDoc.exists) {
+        throw ServerException();
+      }
+      final userData = userDoc.data() as Map<String, dynamic>;
+      final storeName = userData['storeName']?.toString() ?? 'Unknown Store';
+
+      // Create a new VoucherModel with userId and storeName
+      final voucherWithUserId = VoucherModel(
+        id: voucher.id,
+        name: voucher.name,
+        amount: voucher.amount,
+        type: voucher.type,
+        obtainMethod: voucher.obtainMethod,
+        validityPeriod: voucher.validityPeriod,
+        userId: currentUser.uid,
+      );
+
+      final voucherRef = firestore.collection('vouchers').doc(voucher.id);
+      await voucherRef.set(voucherWithUserId.toMap());
+      return voucherWithUserId;
+    } catch (e) {
+      print('Error creating voucher: $e');
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<VoucherModel>> getVouchers() async {
+    try {
+      final snapshot = await firestore.collection('vouchers').get();
+      return snapshot.docs
+          .map((doc) => VoucherModel.fromJson(doc.data(), doc.id))
+          .toList();
+    } catch (e) {
+      print('Error fetching vouchers: $e');
       throw ServerException();
     }
   }

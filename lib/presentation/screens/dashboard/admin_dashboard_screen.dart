@@ -185,7 +185,9 @@ class AdminDashboardScreen extends ConsumerWidget {
                                                 ),
                                               ),
                                               GestureDetector(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  context.go('/create-voucher');
+                                                },
                                                 child: SizedBox(
                                                   width: MediaQuery.of(context)
                                                           .size

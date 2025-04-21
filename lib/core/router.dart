@@ -9,6 +9,8 @@ import 'package:flutter_laundry_app/presentation/screens/auth/register_screen.da
 import 'package:flutter_laundry_app/presentation/screens/splash_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_laundry_app/presentation/screens/voucher/voucher_list_screen.dart.dart';
+import 'package:flutter_laundry_app/presentation/screens/voucher/create_voucher_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -53,6 +55,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/price-management-screen',
         builder: (context, state) => const PriceManagementScreen(),
+      ),
+      GoRoute(
+        path: '/create-voucher',
+        builder: (context, state) => const CreateVoucherScreen(),
+      ),
+      GoRoute(
+        path: '/vouchers', // Add the route for VoucherListScreen
+        builder: (context, state) => const VoucherListScreen(),
       ),
     ],
   );

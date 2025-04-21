@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1039249932081",
-    "project_id": "flutter-laundry-app-6eee2",
-    "storage_bucket": "flutter-laundry-app-6eee2.firebasestorage.app"
+    "project_number": "1054056680128",
+    "project_id": "laundry-flutter-app",
+    "storage_bucket": "laundry-flutter-app.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1039249932081:android:b5651715e68129038aba10",
+        "mobilesdk_app_id": "1:1054056680128:android:d31665c885bbde95d93b25",
         "android_client_info": {
           "package_name": "com.example.flutter_laundry_app"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAzY9jDD1SpnN7-QIe07ynO9MOe_PPdOrw"
+          "current_key": "AIzaSyDJuUV0j0ZKgHGkqU7-mbqMXZp0s-bj8Wc"
         }
       ],
       "services": {

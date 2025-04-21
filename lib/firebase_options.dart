@@ -23,20 +23,11 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -50,20 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAzY9jDD1SpnN7-QIe07ynO9MOe_PPdOrw',
-    appId: '1:1039249932081:android:b5651715e68129038aba10',
-    messagingSenderId: '1039249932081',
-    projectId: 'flutter-laundry-app-6eee2',
-    storageBucket: 'flutter-laundry-app-6eee2.firebasestorage.app',
+    apiKey: 'AIzaSyDJuUV0j0ZKgHGkqU7-mbqMXZp0s-bj8Wc',
+    appId: '1:1054056680128:android:d31665c885bbde95d93b25',
+    messagingSenderId: '1054056680128',
+    projectId: 'laundry-flutter-app',
+    storageBucket: 'laundry-flutter-app.firebasestorage.app',
   );
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCLCx47TfVfS9CAZtbzwhlfDCY1N1OrCyk',
-    appId: '1:410440240900:web:d1ee7f0934b622c6c78a51',
-    messagingSenderId: '410440240900',
-    projectId: 'yolo-kasir',
-    authDomain: 'yolo-kasir.firebaseapp.com',
-    storageBucket: 'yolo-kasir.firebasestorage.app',
+    apiKey: 'AIzaSyC13aVQOMw-XpDSWD56NKyQVECWYHd0bfQ',
+    appId: '1:1054056680128:web:f982afcc621877a5d93b25',
+    messagingSenderId: '1054056680128',
+    projectId: 'laundry-flutter-app',
+    authDomain: 'laundry-flutter-app.firebaseapp.com',
+    storageBucket: 'laundry-flutter-app.firebasestorage.app',
+    measurementId: 'G-VQWXG44NW1',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCtaeLUisMfKf9_VXRMRONE5chsutfCw84',
+    appId: '1:1054056680128:ios:5aa24f934662c1a6d93b25',
+    messagingSenderId: '1054056680128',
+    projectId: 'laundry-flutter-app',
+    storageBucket: 'laundry-flutter-app.firebasestorage.app',
+    iosBundleId: 'com.example.flutterLaundryApp',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCtaeLUisMfKf9_VXRMRONE5chsutfCw84',
+    appId: '1:1054056680128:ios:5aa24f934662c1a6d93b25',
+    messagingSenderId: '1054056680128',
+    projectId: 'laundry-flutter-app',
+    storageBucket: 'laundry-flutter-app.firebasestorage.app',
+    iosBundleId: 'com.example.flutterLaundryApp',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyC13aVQOMw-XpDSWD56NKyQVECWYHd0bfQ',
+    appId: '1:1054056680128:web:0b174dc962bdf197d93b25',
+    messagingSenderId: '1054056680128',
+    projectId: 'laundry-flutter-app',
+    authDomain: 'laundry-flutter-app.firebaseapp.com',
+    storageBucket: 'laundry-flutter-app.firebasestorage.app',
+    measurementId: 'G-XZFYN2NZWR',
   );
 
 }

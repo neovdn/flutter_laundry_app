@@ -9,9 +9,13 @@ class BackgroundColors {
   static const Color error = Colors.red; // Error state background
 
   // Feature-specific colors
-  static const Color dashboardBackground = Color(0xFF95BBE3); // Dashboard background
+  static const Color dashboardBackground =
+      Color(0xFF95BBE3); // Dashboard background
   static const Color appBarBackground = Color(0xFF95BBE3); // AppBar background
-  static const Color contentContainer = Color(0xFFFFFFFF); // White container background
+  static const Color contentContainer =
+      Color(0xFFFFFFFF); // White container background
   static const Color avatarBackground = Color(0xFFFFFFFF); // Avatar background
-  static const Color splashBackground = Color(0xFFFFFFFF); // Avatar background
+  static const Color splashBackground = Color(0xFFFFFFFF);
+
+  static var lightGrey; // Avatar background
 }
